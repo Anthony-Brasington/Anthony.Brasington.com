@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+    :root{
+      --primary:#000814;
+      --secondary:#001d3d;
+      --accent:#3b82f6;
+      --accent-glow:rgba(59,130,246,0.4);
+      --text-primary:#ffffff;
+      --text-secondary:#94a3b8;
+      --text-muted:#64748b;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',sans-serif;
+      background:#000814;
+      color:var(--text-primary);
+      line-height:1.6;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    /* Animated gradient background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 800px 600px at 20% 50%, rgba(59,130,246,0.15), transparent),
+        radial-gradient(ellipse 600px 800px at 80% 20%, rgba(139,92,246,0.12), transparent),
+        radial-gradient(ellipse 700px 700px at 50% 80%, rgba(59,130,246,0.1), transparent),
+        radial-gradient(ellipse 500px 500px at 10% 10%, rgba(99,102,241,0.08), transparent);
+      animation: bgShift 20s ease infinite, bgMove 30s ease infinite;
+      z-index: -1;
+      filter: blur(40px);
+    }
+
+    @keyframes bgShift {
+      0%, 100% { 
+        opacity: 1; 
+        transform: scale(1) rotate(0deg);
+      }
+      50% { 
+        opacity: 0.7; 
+        transform: scale(1.15) rotate(5deg);
+      }
+    }
+    
+    @keyframes bgMove {
+      0%, 100% {
+        background-position: 0% 0%, 100% 0%, 50% 100%, 0% 0%;
+      }
+      25% {
+        background-position: 100% 0%, 0% 100%, 0% 50%, 50% 50%;
+      }
+      50% {
+        background-position: 50% 100%, 50% 50%, 100% 0%, 100% 100%;
+      }
+      75% {
+        background-position: 0% 50%, 100% 50%, 0% 0%, 50% 100%;
+      }
+    }
+
+    /* Stars with depth */
+    .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .star{
+      position:absolute;background:#fff;border-radius:50%;
+      opacity:.6;animation:twinkle 3s infinite ease-in-out;
+      box-shadow: 0 0 4px rgba(255,255,255,0.5);
+    }
+    .star.small{width:1px;height:1px}
+    .star.medium{width:2px;height:2px}
+    .star.large{width:3px;height:3px;box-shadow: 0 0 8px rgba(255,255,255,0.8)}
+    @keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+
+    /* Nav with glassmorphism */
+    .navbar{
+      position:fixed;left:0;right:0;top:0;
+      background:rgba(0,8,20,.6);
+      backdrop-filter:blur(20px);
+      padding:1.5rem 4rem;z-index:1000;
+      display:flex;justify-content:space-between;align-items:center;
+      border-bottom:1px solid rgba(59,130,246,.2);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    }
+    .logo-area{
+      font-size:1.5rem;font-weight:700;
+      background:linear-gradient(135deg, var(--accent), #8b5cf6);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .nav-center{display:flex;gap:3rem;list-style:none}
+    .nav-link{
+      text-decoration:none;color:var(--text-secondary);
+      font-size:.95rem;font-weight:500;cursor:pointer;
+      transition:.3s;position:relative;
+    }
+    .nav-link::after{
+      content:'';position:absolute;bottom:-5px;left:0;
+      width:0;height:2px;background:var(--accent);
+      transition:width .3s ease;
+    }
+    .nav-link:hover::after,.nav-link.active::after{width:100%}
+    .nav-link:hover,.nav-link.active{color:var(--text-primary)}
+    .nav-cta{
+      padding:.75rem 1.5rem;
+      background:linear-gradient(135deg, var(--accent), #8b5cf6);
+      color:#fff;border-radius:25px;text-decoration:none;
+      font-weight:600;font-size:.9rem;
+      display:inline-flex;align-items:center;gap:.5rem;
+      transition:.3s;box-shadow: 0 4px 15px var(--accent-glow);
+    }
+    .nav-cta:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 25px var(--accent-glow);
+    }
+
+    /* Hero with parallax effect */
+    .hero{
+      min-height:100vh;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      padding:10rem 4rem 4rem;text-align:center;
+      position:relative;overflow:hidden;
+    }
+    .hero::before{
+      content:'';position:absolute;
+      top:-50%;right:-20%;width:800px;height:800px;
+      background:radial-gradient(circle, var(--accent-glow), transparent 70%);
+      border-radius:50%;animation:float 8s ease-in-out infinite;
+    }
+    @keyframes float{
+      0%,100%{transform:translateY(0) rotate(0deg)}
+      50%{transform:translateY(30px) rotate(5deg)}
+    }
+    .hero-content{position:relative;z-index:2}
+    .hero-content h1{
+      font-size:5.5rem;font-weight:400;
+      color:var(--text-primary);margin-bottom:2rem;
+      line-height:1.2;letter-spacing:-1px;
+      text-shadow: 0 0 40px rgba(59,130,246,0.3);
+    }
+    .hero-content h1 .serif{
+      font-family:'Playfair Display',serif;
+      font-style:italic;font-weight:400;
+    }
+    .hero-content h1 .gradient{
+      background:linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .hero-badges{
+      display:flex;gap:1.5rem;justify-content:center;
+      margin:3rem 0;flex-wrap:wrap;
+    }
+    .badge{
+      padding:.75rem 1.5rem;
+      background:rgba(59,130,246,.15);
+      border:1px solid rgba(59,130,246,.4);
+      border-radius:25px;font-size:.9rem;
+      color:var(--text-secondary);
+      display:flex;align-items:center;gap:.5rem;
+      backdrop-filter:blur(10px);
+      transition:.3s;cursor:default;
+    }
+    .badge:hover{
+      background:rgba(59,130,246,.25);
+      border-color:rgba(59,130,246,.6);
+      transform:translateY(-2px);
+    }
+    .badge-icon{
+      width:8px;height:8px;
+      background:var(--accent);
+      border-radius:50%;
+      box-shadow:0 0 10px var(--accent);
+      animation:pulse 2s ease infinite;
+    }
+    @keyframes pulse{
+      0%,100%{transform:scale(1);opacity:1}
+      50%{transform:scale(1.2);opacity:.7}
+    }
+    .badge.available .badge-icon{
+      background:#22c55e;
+      box-shadow:0 0 10px #22c55e;
+    }
+    .hero-subtitle{
+      font-size:1.1rem;color:var(--text-secondary);
+      margin-top:2rem;
+    }
+
+    /* Section styling with depth */
+    .section-wrapper{
+      position:relative;
+      padding:8rem 4rem;
+      background:rgba(0,8,20,.5);
+      backdrop-filter:blur(10px);
+    }
+    .section-wrapper::before{
+      content:'';position:absolute;top:0;left:50%;
+      width:1px;height:100%;
+      background:linear-gradient(to bottom, transparent, rgba(59,130,246,.3), transparent);
+      transform:translateX(-50%);
+    }
+    .section-header{text-align:center;margin-bottom:5rem;position:relative}
+    .section-title{
+      font-size:3.5rem;color:var(--text-primary);
+      margin-bottom:1rem;font-weight:700;
+      letter-spacing:-1px;
+      text-shadow:0 0 30px rgba(59,130,246,0.3);
+    }
+    .section-subtitle{font-size:1.1rem;color:var(--text-muted)}
+
+    /* Projects with 3D cards */
+    .projects-filter{
+      display:flex;justify-content:center;gap:1rem;
+      margin-bottom:4rem;
+    }
+    .filter-btn{
+      padding:.75rem 1.5rem;
+      border:1px solid rgba(59,130,246,.3);
+      background:rgba(59,130,246,.1);
+      color:var(--text-secondary);
+      border-radius:25px;cursor:pointer;
+      font-weight:500;transition:.3s;
+      backdrop-filter:blur(10px);
+    }
+    .filter-btn.active{
+      background:linear-gradient(135deg, var(--accent), #8b5cf6);
+      color:#fff;border-color:transparent;
+      box-shadow:0 4px 15px var(--accent-glow);
+    }
+    .filter-btn:hover{
+      border-color:var(--accent);
+      transform:translateY(-2px);
+    }
+    .project-category{display:none}
+    .project-category.active{
+      display:grid;grid-template-columns:repeat(3,1fr);
+      gap:2.5rem;max-width:1600px;margin:0 auto;
+    }
+    .project-card{
+      background:linear-gradient(135deg, rgba(0,29,61,.6), rgba(0,8,20,.8));
+      border:1px solid rgba(59,130,246,.2);
+      border-radius:16px;overflow:hidden;
+      transition:.4s cubic-bezier(.4,0,.2,1);
+      cursor:pointer;display:flex;flex-direction:column;
+      backdrop-filter:blur(10px);
+      box-shadow:0 10px 30px rgba(0,0,0,.3);
+      position:relative;
+    }
+    .project-card::before{
+      content:'';
+      position:absolute;
+      top:-50%;
+      right:-50%;
+      width:200%;
+      height:200%;
+      background:linear-gradient(
+        45deg,
+        transparent,
+        transparent 45%,
+        rgba(59,130,246,0.15) 48%,
+        rgba(59,130,246,0.3) 50%,
+        rgba(59,130,246,0.15) 52%,
+        transparent 55%,
+        transparent
+      );
+      animation:cardShimmer 8s infinite;
+      animation-delay:calc(var(--card-delay) * 1s);
+      pointer-events:none;
+    }
+    .project-card:nth-child(1){--card-delay:0}
+    .project-card:nth-child(2){--card-delay:2}
+    .project-card:nth-child(3){--card-delay:4}
+    @keyframes cardShimmer{
+      0%{
+        transform:translate(-100%, -100%) rotate(45deg);
+      }
+      100%{
+        transform:translate(100%, 100%) rotate(45deg);
+      }
+    }
+    .project-card:hover{
+      border-color:rgba(59,130,246,.6);
+      transform:translateY(-12px) scale(1.02);
+      box-shadow:0 20px 60px rgba(59,130,246,.3);
+    }
+    .project-card:hover::before{
+      animation-play-state:paused;
+    }
+    .project-card-image{
+      width:100%;height:300px;
+      background:linear-gradient(135deg,#001d3d 0%,#000814 100%);
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;position:relative;
+    }
+    .project-card-image::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(180deg, transparent 0%, rgba(0,8,20,.8) 100%);
+    }
+    .project-card-image img{
+      width:100%;height:100%;object-fit:contain;
+      padding:2rem;transition:.4s ease;
+      filter:brightness(0.9);
+    }
+    .project-card:hover .project-card-image img{
+      transform:scale(1.1);filter:brightness(1.1);
+    }
+    .project-card-content{
+      padding:2rem;flex:1;
+      display:flex;flex-direction:column;
+    }
+    .project-card h3{
+      font-size:1.4rem;color:var(--text-primary);
+      margin-bottom:1rem;font-weight:600;
+    }
+    .project-card p{
+      color:var(--text-secondary);flex:1;
+      margin-bottom:1.5rem;line-height:1.7;
+    }
+    .project-card-link{
+      color:var(--accent);text-decoration:none;
+      font-weight:600;display:inline-flex;
+      align-items:center;gap:.5rem;
+      transition:gap .3s ease;
+    }
+    .project-card-link:hover{gap:1rem}
+
+    /* About with floating effect */
+    .about-section{
+      padding:8rem 4rem;display:flex;
+      justify-content:center;align-items:center;
+      background:rgba(0,8,20,.8);position:relative;
+    }
+    .about-container{
+      display:flex;align-items:center;
+      justify-content:center;gap:4rem;
+      flex-wrap:wrap;max-width:1200px;
+    }
+    .about-image{
+      position:relative;flex:0 0 auto;
+      width:340px;height:340px;
+      overflow:hidden;border-radius:50%;
+      border:3px solid rgba(59,130,246,.5);
+      box-shadow:0 0 40px var(--accent-glow),
+                 0 10px 30px rgba(0,0,0,.5);
+      animation:floatImage 6s ease-in-out infinite;
+    }
+    @keyframes floatImage{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-10px)}
+    }
+    .about-image::before{
+      content:'';position:absolute;inset:-3px;
+      background:linear-gradient(135deg, var(--accent), #8b5cf6);
+      border-radius:50%;z-index:-1;
+      animation:rotate 8s linear infinite;
+    }
+    @keyframes rotate{
+      100%{transform:rotate(360deg)}
+    }
+    .about-image img{
+      width:100%;height:100%;object-fit:cover;
+    }
+    .about-content{max-width:600px}
+    .about-content h2{
+      font-size:3rem;font-weight:700;
+      color:var(--text-primary);margin-bottom:1rem;
+      text-shadow:0 0 20px rgba(59,130,246,0.3);
+    }
+    .about-content h3{
+      font-size:1.4rem;
+      background:linear-gradient(135deg, var(--accent), #a78bfa);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin-bottom:1.5rem;
+    }
+    .about-content p{
+      color:var(--text-secondary);
+      margin-bottom:1rem;line-height:1.8;
+    }
+    .about-skills{
+      margin-top:2rem;display:flex;
+      flex-wrap:wrap;gap:.75rem;
+    }
+    .skill-tag{
+      padding:.5rem 1rem;
+      border:1px solid rgba(59,130,246,.4);
+      background:rgba(59,130,246,.1);
+      border-radius:25px;
+      color:var(--text-secondary);
+      font-size:.9rem;
+      backdrop-filter:blur(10px);
+      transition:.3s;
+    }
+    .skill-tag:hover{
+      background:rgba(59,130,246,.2);
+      border-color:rgba(59,130,246,.6);
+      transform:translateY(-2px);
+    }
+
+    /* Experience cards with hover lift */
+    .experience-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);
+      gap:2.5rem;max-width:1600px;margin:0 auto;
+    }
+    .experience-item{
+      background:linear-gradient(135deg, rgba(0,29,61,.6), rgba(0,8,20,.8));
+      border:1px solid rgba(59,130,246,.2);
+      padding:2.5rem;border-radius:16px;
+      transition:.3s;backdrop-filter:blur(10px);
+      box-shadow:0 10px 30px rgba(0,0,0,.3);
+      position:relative;overflow:hidden;
+    }
+    .experience-item::before{
+      content:'';
+      position:absolute;
+      top:-50%;
+      left:-50%;
+      width:200%;
+      height:200%;
+      background:linear-gradient(
+        120deg,
+        transparent,
+        transparent 40%,
+        rgba(59,130,246,0.2) 45%,
+        rgba(59,130,246,0.4) 50%,
+        rgba(59,130,246,0.2) 55%,
+        transparent 60%,
+        transparent
+      );
+      animation:shimmer 6s infinite;
+      animation-delay:calc(var(--delay) * 1s);
+    }
+    .experience-item:nth-child(1){--delay:0}
+    .experience-item:nth-child(2){--delay:1}
+    .experience-item:nth-child(3){--delay:2}
+    .experience-item:nth-child(4){--delay:3}
+    .experience-item:nth-child(5){--delay:4}
+    .experience-item:nth-child(6){--delay:5}
+    @keyframes shimmer{
+      0%{
+        transform:translate(-100%, -100%) rotate(30deg);
+      }
+      100%{
+        transform:translate(100%, 100%) rotate(30deg);
+      }
+    }
+    .experience-item:hover{
+      border-color:rgba(59,130,246,.5);
+      transform:translateY(-8px);
+      box-shadow:0 15px 40px rgba(59,130,246,.2);
+    }
+    .experience-item:hover::before{
+      animation-play-state:paused;
+    }
+    .experience-item h3{
+      font-size:1.3rem;color:var(--text-primary);
+      margin-bottom:1rem;font-weight:600;
+    }
+    .experience-item p{
+      color:var(--text-secondary);line-height:1.8;
+    }
+
+    /* Project details with enhanced styling */
+    .project-details{
+      padding:8rem 4rem;
+      background:rgba(0,8,20,.9);
+    }
+    .project-detail{
+      max-width:1400px;margin:0 auto;display:none;
+    }
+    .project-detail.active{
+      display:block;animation:fadeIn .5s ease;
+    }
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    
+    /* Project header with split layout */
+    .detail-header-section{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:3rem;
+      margin-bottom:4rem;
+      align-items:center;
+      animation: slideInUp 0.8s ease;
+    }
+    @keyframes slideInUp{
+      from{opacity:0;transform:translateY(30px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .detail-text-side{
+      padding:3rem;
+      background:linear-gradient(135deg, rgba(0,29,61,.6), rgba(0,8,20,.8));
+      border:1px solid rgba(59,130,246,.3);
+      border-radius:20px;
+      backdrop-filter:blur(20px);
+      animation: fadeInLeft 1s ease;
+    }
+    @keyframes fadeInLeft{
+      from{opacity:0;transform:translateX(-30px)}
+      to{opacity:1;transform:translateX(0)}
+    }
+    .detail-image-side{
+      height:500px;
+      background:rgba(0,29,61,.4);
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid rgba(59,130,246,.2);
+      box-shadow:0 20px 60px rgba(0,0,0,.5);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      animation: fadeInRight 1s ease, floatImage 6s ease-in-out infinite 1s;
+    }
+    @keyframes fadeInRight{
+      from{opacity:0;transform:translateX(30px)}
+      to{opacity:1;transform:translateX(0)}
+    }
+    .detail-image-side img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .detail-title{
+      font-size:3rem;color:var(--text-primary);
+      margin-bottom:.5rem;font-weight:700;
+      letter-spacing:-1px;
+      text-shadow:0 0 30px rgba(59,130,246,0.3);
+      animation: textGlow 3s ease-in-out infinite;
+    }
+    @keyframes textGlow{
+      0%, 100%{text-shadow:0 0 30px rgba(59,130,246,0.3)}
+      50%{text-shadow:0 0 40px rgba(59,130,246,0.5)}
+    }
+    .detail-subtitle{
+      font-size:1.2rem;
+      background:linear-gradient(135deg, var(--accent), #a78bfa);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin-bottom:2rem;font-weight:500;
+    }
+    .detail-meta{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:1rem;
+      margin-top:2rem;
+    }
+    .meta-item{
+      padding:1rem;
+      background:rgba(59,130,246,.1);
+      border:1px solid rgba(59,130,246,.2);
+      border-radius:8px;
+      animation: fadeInScale 0.8s ease;
+      animation-fill-mode: both;
+    }
+    .meta-item:nth-child(1){animation-delay:0.2s}
+    .meta-item:nth-child(2){animation-delay:0.3s}
+    .meta-item:nth-child(3){animation-delay:0.4s}
+    .meta-item:nth-child(4){animation-delay:0.5s}
+    @keyframes fadeInScale{
+      from{opacity:0;transform:scale(0.9)}
+      to{opacity:1;transform:scale(1)}
+    }
+    .meta-item strong{
+      display:block;
+      color:var(--accent);
+      font-size:.85rem;
+      margin-bottom:.25rem;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+    .meta-item span{
+      color:var(--text-secondary);
+      font-size:.95rem;
+    }
+    
+    /* Content sections in cards */
+    .detail-content-grid{
+      display:grid;
+      gap:2rem;
+    }
+    .detail-section{
+      padding:3rem;
+      background:linear-gradient(135deg, rgba(0,29,61,.6), rgba(0,8,20,.8));
+      border:1px solid rgba(59,130,246,.2);
+      border-radius:20px;
+      backdrop-filter:blur(20px);
+      box-shadow:0 10px 30px rgba(0,0,0,.3);
+      transition:.3s;
+      animation: fadeInUp 0.8s ease;
+      animation-fill-mode: both;
+      opacity:0;
+    }
+    .detail-section:nth-child(1){animation-delay:0.6s}
+    .detail-section:nth-child(2){animation-delay:0.7s}
+    .detail-section:nth-child(3){animation-delay:0.8s}
+    .detail-section:nth-child(4){animation-delay:0.9s}
+    .detail-section:nth-child(5){animation-delay:1s}
+    @keyframes fadeInUp{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .detail-section:hover{
+      border-color:rgba(59,130,246,.4);
+      transform:translateY(-4px);
+      box-shadow:0 15px 40px rgba(59,130,246,.15);
+    }
+    .detail-section h3{
+      font-size:1.6rem;color:var(--text-primary);
+      margin-bottom:1.5rem;font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:1rem;
+    }
+    .detail-section h3::before{
+      content:'';
+      width:4px;
+      height:30px;
+      background:linear-gradient(180deg, var(--accent), transparent);
+      border-radius:2px;
+      animation: barGrow 0.6s ease;
+      animation-fill-mode: both;
+    }
+    @keyframes barGrow{
+      from{height:0}
+      to{height:30px}
+    }
+    .detail-section p{
+      color:var(--text-secondary);line-height:1.9;
+      margin-bottom:1rem;
+    }
+    .detail-section p strong{
+      color:var(--text-primary);font-weight:600;
+    }
+    
+    /* Two column layout for sections */
+    .detail-two-col{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:2rem;
+    }
+    
+    /* Full width image sections */
+    .detail-image-full{
+      width:100%;
+      height:600px;
+      background:rgba(0,29,61,.4);
+      border-radius:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      border:1px solid rgba(59,130,246,.2);
+      box-shadow:0 20px 60px rgba(0,0,0,.5);
+      margin:2rem 0;
+    }
+    .detail-image-full img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    
+    /* Back button */
+    .detail-back-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      padding:.75rem 1.5rem;
+      background:rgba(59,130,246,.1);
+      border:1px solid rgba(59,130,246,.3);
+      color:var(--accent);
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+      transition:.3s;
+      margin-bottom:3rem;
+      animation: slideInLeft 0.6s ease;
+    }
+    @keyframes slideInLeft{
+      from{opacity:0;transform:translateX(-20px)}
+      to{opacity:1;transform:translateX(0)}
+    }
+    .detail-back-btn:hover{
+      background:rgba(59,130,246,.2);
+      border-color:rgba(59,130,246,.5);
+      transform:translateX(-4px);
+    }
+
+    @media (max-width:968px){
+      .detail-header-section,
+      .detail-two-col{
+        grid-template-columns:1fr;
+      }
+      .detail-image-side,
+      .detail-image-full{
+        height:400px;
+      }
+    }
+
+    /* Footer */
+    .footer{
+      padding:4rem 4rem;
+      background:rgba(0,8,20,.95);
+      border-top:1px solid rgba(59,130,246,.2);
+      text-align:center;
+      box-shadow:0 -10px 30px rgba(0,0,0,.3);
+    }
+    .footer p{color:var(--text-muted);margin-bottom:1rem}
+    .footer a{
+      color:var(--accent);text-decoration:none;
+      font-weight:600;transition:.3s;margin:0 .75rem;
+    }
+    .footer a:hover{
+      color:#60a5fa;text-decoration:underline;
+    }
+
+    /* Responsive */
+    @media (max-width:1280px){
+      .experience-grid,.project-category.active{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+    @media (max-width:768px){
+      .navbar{padding:1rem 2rem}
+      .nav-center{gap:1.5rem}
+      .hero{padding:6rem 2rem 4rem}
+      .hero-content h1{font-size:2.5rem}
+      .section-title{font-size:2rem}
+      .section-wrapper{padding:4rem 2rem}
+      .experience-grid,.project-category.active{
+        grid-template-columns:1fr;
+      }
+      .project-detail{padding:2rem}
+      .detail-title{font-size:2rem}
+      .about-container{flex-direction:column;text-align:center}
+      .about-image{width:260px;height:260px}
+    }
+  </style>
+</head>
+<body>
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Nav -->
+  <nav class="navbar">
+    <div class="logo-area">DP</div>
+    <ul class="nav-center">
+      <li><a class="nav-link" onclick="scrollToSection('projects')">Projects</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('experience')">Experience</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('about')">About Me</a></li>
+    </ul>
+    <a href="mailto:contact@example.com" class="nav-cta">Let's Connect →</a>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <h1>
+        Designing how <span class="serif gradient">Humans</span><br/>
+        <span class="serif">experience</span> <span class="gradient">Technology</span>
+      </h1>
+      <div class="hero-badges">
+        <div class="badge"><span class="badge-icon"></span><span>UX/UI Design</span></div>
+        <div class="badge"><span class="badge-icon"></span><span>Lead Prototyper</span></div>
+        <div class="badge available"><span class="badge-icon"></span><span>Available for work</span></div>
+      </div>
+      <p class="hero-subtitle">Experience across SCAD, Philosophy, FINRA | Student → Professional Projects</p>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section-wrapper">
+    <div class="section-header">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-subtitle">Explore my complete portfolio</p>
+    </div>
+
+    <div class="projects-filter">
+      <button class="filter-btn active" onclick="filterProjects('all')">All Work</button>
+      <button class="filter-btn" onclick="filterProjects('ux')">UX/UI Design</button>
+      <button class="filter-btn" onclick="filterProjects('graphic')">Graphic Design</button>
+    </div>
+
+    <div id="all" class="project-category active">
+      <div class="project-card" onclick="showProjectDetail(1); scrollToSection('projects-detail');">
+        <div class="project-card-image">
+          <img src="pics/Philosophy-logo.jpeg" alt="Philosophy"/>
+        </div>
+        <div class="project-card-content">
+          <h3>Philosophy UI Design</h3>
+          <p>UI design and prototyping for makeup company website.</p>
+          <a href="#" class="project-card-link">View Case →</a>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="showProjectDetail(2); scrollToSection('projects-detail');">
+        <div class="project-card-image">
+          <img src="pics/FINRA2.jpg" alt="FINRA"/>
+        </div>
+        <div class="project-card-content">
+          <h3>FINRA Team Project</h3>
+          <p>Large-scale regulated financial industry project.</p>
+          <a href="#" class="project-card-link">View Case →</a>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="showProjectDetail(3); scrollToSection('projects-detail');">
+        <div class="project-card-image">
+          <img src="pics/NEST Redesign.png" alt="NEST"/>
+        </div>
+        <div class="project-card-content">
+          <h3>NEST Redesign</h3>
+          <p>Smart home app redesign and prototyping.</p>
+          <a href="#" class="project-card-link">View Case →</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="ux" class="project-category">
+      <div class="project-card" onclick="showProjectDetail(1); scrollToSection('projects-detail');">
+        <div class="project-card-image">
+          <img src="pics/Philosophy-logo.jpeg" alt="Philosophy"/>
+        </div>
+        <div class="project-card-content">
+          <h3>Philosophy UI Design</h3>
+          <p>UI design and prototyping for makeup company.</p>
+          <a href="#" class="project-card-link">View Case →</a>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="showProjectDetail(2); scrollToSection('projects-detail');">
+        <div class="project-card-image">
+          <img src="pics/FINRA2.jpg" alt="FINRA"/>
+        </div>
+        <div class="project-card-content">
+          <h3>FINRA Team Project</h3>
+          <p>Large-scale regulated project.</p>
+          <a href="#" class="project-card-link">View Case →</a>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="showProjectDetail(3); scrollToSection('projects-detail');">
+        <div class="project-card-image">
+          <img src="pics/NEST Redesign.png" alt="NEST"/>
+        </div>
+        <div class="project-card-content">
+          <h3>NEST Redesign</h3>
+          <p>Smart home app redesign.</p>
+          <a href="#" class="project-card-link">View Case →</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="graphic" class="project-category">
+      <div class="project-card">
+        <div class="project-card-image">
+          <div style="color:var(--text-secondary);font-weight:600;">Brand Identity</div>
+        </div>
+        <div class="project-card-content">
+          <h3>Brand Identity System</h3>
+          <p>Comprehensive brand identity for tech startup.</p>
+          <a href="#" class="project-card-link">View Project →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-image">
+          <div style="color:var(--text-secondary);font-weight:600;">Print Design</div>
+        </div>
+        <div class="project-card-content">
+          <h3>Annual Report Design</h3>
+          <p>Corporate report with data visualization.</p>
+          <a href="#" class="project-card-link">View Project →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-image">
+          <div style="color:var(--text-secondary);font-weight:600;">Packaging</div>
+        </div>
+        <div class="project-card-content">
+          <h3>Product Packaging</h3>
+          <p>Sustainable packaging for eco products.</p>
+          <a href="#" class="project-card-link">View Project →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="about-section">
+    <div class="about-container">
+      <div class="about-image">
+        <img src="pics/portfolio cover.jpg" alt="About Me"/>
+      </div>
+      <div class="about-content">
+        <h2>About Me</h2>
+        <h3>UI/UX Designer & Lead Prototyper</h3>
+        <p>I'm a passionate designer specializing in creating intuitive digital experiences. Currently pursuing User Experience Design at SCAD, I combine my background in Graphic Design with a deep understanding of user-centered design principles.</p>
+        <p>My approach focuses on rapid prototyping, thoughtful interactions, and creating designs that solve real problems. I believe great design is invisible—it just works.</p>
+        <p>When I'm not designing, you'll find me exploring augmented reality art, experimenting with new design tools, or collaborating with teams to bring innovative ideas to life.</p>
+        <div class="about-skills">
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Prototyping</span>
+          <span class="skill-tag">UI Design</span>
+          <span class="skill-tag">User Research</span>
+          <span class="skill-tag">Photoshop</span>
+          <span class="skill-tag">Illustrator</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience" class="section-wrapper">
+    <div class="section-header">
+      <h2 class="section-title">Experience</h2>
+      <p class="section-subtitle">My journey in design and technology</p>
+    </div>
+    <div class="experience-grid">
+      <div class="experience-item">
+        <h3>SCAD UX Design</h3>
+        <p>Pursuing User Experience Design with foundation in Graphic Design. Building expertise in design theory and digital product design.</p>
+      </div>
+      <div class="experience-item">
+        <h3>SUNY Sullivan</h3>
+        <p>Graduated with degree in Graphic Design. Established foundation in visual design, typography, and branding.</p>
+      </div>
+      <div class="experience-item">
+        <h3>AR Artist</h3>
+        <p>Created augmented reality installations for museums, combining traditional art with cutting-edge technology.</p>
+      </div>
+      <div class="experience-item">
+        <h3>UI Designer</h3>
+        <p>Collaborated on user interface design and experience solutions for digital platforms.</p>
+      </div>
+      <div class="experience-item">
+        <h3>FINRA Design Team</h3>
+        <p>Large team member on regulated financial projects. Contributed to UX design and research.</p>
+      </div>
+      <div class="experience-item">
+        <h3>Lead Prototyper</h3>
+        <p>Led prototyping for comprehensive redesign, creating interactive solutions and user flows.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Details -->
+  <section id="projects-detail" class="project-details">
+    <!-- Project 1 -->
+    <div class="project-detail" id="detail-1">
+      <button class="detail-back-btn" onclick="scrollToSection('projects')">← Back to Projects</button>
+      
+      <div class="detail-header-section">
+        <div class="detail-text-side">
+          <h2 class="detail-title">Philosophy UI Design</h2>
+          <p class="detail-subtitle">Makeup Company Website Project</p>
+          <p style="color:var(--text-secondary);line-height:1.8;margin-bottom:2rem">Led all prototyping efforts while contributing to design decisions. Created professional animations, transitions, and maintained design consistency across the team's work.</p>
+          
+          <div class="detail-meta">
+            <div class="meta-item">
+              <strong>Role</strong>
+              <span>UI Designer & Lead Prototyper</span>
+            </div>
+            <div class="meta-item">
+              <strong>Timeline</strong>
+              <span>5 weeks</span>
+            </div>
+            <div class="meta-item">
+              <strong>Team</strong>
+              <span>3 designers</span>
+            </div>
+            <div class="meta-item">
+              <strong>Tools</strong>
+              <span>Figma</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="detail-image-side">
+          <img src="pics/Philosophy-logo.jpeg" alt="Philosophy"/>
+        </div>
+      </div>
+
+      <div class="detail-content-grid">
+        <div class="detail-section">
+          <h3>Responsibilities</h3>
+          <p>As Lead Prototyper, I owned the end-to-end prototyping process: leading all prototyping efforts, contributing to layout and visual design decisions, creating smooth animations and transitions, facilitating daily collaboration, and ensuring design consistency across deliverables.</p>
+        </div>
+
+        <div class="detail-two-col">
+          <div class="detail-section">
+            <h3>Technical Skills</h3>
+            <p>Advanced Figma prototyping, UI design and layout creation, animation and transition design, design system implementation</p>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Professional Skills</h3>
+            <p>Team leadership and communication, client collaboration, design critique and feedback integration, project management and coordination</p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Outcome</h3>
+          <p>Successfully delivered within the 5-week timeline. The client expressed strong satisfaction with the final deliverables and requested future collaboration, validating our design approach and execution.</p>
+          <p>This project reinforced my passion for creating user-centered designs that solve real business problems while working effectively in collaborative team environments.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="project-detail" id="detail-2">
+      <button class="detail-back-btn" onclick="scrollToSection('projects')">← Back to Projects</button>
+      
+      <div class="detail-header-section">
+        <div class="detail-text-side">
+          <h2 class="detail-title">FINRA Team Project</h2>
+          <p class="detail-subtitle">Large-Scale Design Team Experience</p>
+          <p style="color:var(--text-secondary);line-height:1.8;margin-bottom:2rem">My first experience on a large-scale regulated financial project. Juggled multiple roles across research, design, and prototyping while adapting to enterprise team pace and processes.</p>
+          
+          <div class="detail-meta">
+            <div class="meta-item">
+              <strong>Roles</strong>
+              <span>User Researcher, UI Designer, Prototyper</span>
+            </div>
+            <div class="meta-item">
+              <strong>Timeline</strong>
+              <span>10 weeks</span>
+            </div>
+            <div class="meta-item">
+              <strong>Team</strong>
+              <span>20+ members</span>
+            </div>
+            <div class="meta-item">
+              <strong>Tools</strong>
+              <span>Figma</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="detail-image-side">
+          <img src="pics/FINRA1.webp" alt="FINRA"/>
+        </div>
+      </div>
+
+      <div class="detail-content-grid">
+        <div class="detail-section">
+          <h3>Multiple Roles</h3>
+          <p><strong>Research:</strong> Conducted primary and secondary research, met with clients for insights gathering, analyzed competitors and best practices, researched user flows and interaction patterns, investigated brand positioning and values.</p>
+          <p><strong>Design & Prototyping:</strong> Created user interface designs, built interactive prototypes, developed presentation decks, applied comprehensive branding techniques to all design work.</p>
+        </div>
+
+        <div class="detail-two-col">
+          <div class="detail-section">
+            <h3>Technical Skills</h3>
+            <p>User research methodology (primary and secondary), UI design and prototyping in Figma, advanced animations for presentations, branding and visual design techniques, professional presentation creation</p>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Professional Growth</h3>
+            <p>Large team collaboration and communication, time management across multiple responsibilities, client interaction and facilitation, workflow optimization and efficiency, maintaining quality under pressure</p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Challenges & Growth</h3>
+          <p>Working with 20+ team members presented unique challenges: adapting to new subject matter quickly, learning the pace required for large-scale projects, balancing multiple roles simultaneously, and working within regulated industry constraints.</p>
+          <p>These challenges taught valuable lessons about professional collaboration, maintaining team harmony, working with diverse leadership styles, and contributing meaningfully to complex projects.</p>
+        </div>
+
+        <div class="detail-section">
+          <h3>Key Learnings</h3>
+          <p>This project was transformative for my professional development. It demonstrated the importance of learning quickly in new environments, communicating effectively in large teams, managing multiple responsibilities, and maintaining quality output during challenging periods.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="project-detail" id="detail-3">
+      <button class="detail-back-btn" onclick="scrollToSection('projects')">← Back to Projects</button>
+      
+      <div class="detail-header-section">
+        <div class="detail-text-side">
+          <h2 class="detail-title">NEST Redesign</h2>
+          <p class="detail-subtitle">Smart Thermostat App Enhancement</p>
+          <p style="color:var(--text-secondary);line-height:1.8;margin-bottom:2rem">Redesigned the NEST mobile app to enhance user experience and interface design. Led all prototyping efforts while designing key screens for the smart home control application.</p>
+          
+          <div class="detail-meta">
+            <div class="meta-item">
+              <strong>Role</strong>
+              <span>Lead Prototyper, UI Designer</span>
+            </div>
+            <div class="meta-item">
+              <strong>Timeline</strong>
+              <span>10 weeks</span>
+            </div>
+            <div class="meta-item">
+              <strong>Team</strong>
+              <span>7 designers</span>
+            </div>
+            <div class="meta-item">
+              <strong>Tools</strong>
+              <span>Figma, Photoshop, Illustrator, Premiere</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="detail-image-side">
+          <img src="pics/NEST Redesign.png" alt="NEST"/>
+        </div>
+      </div>
+
+      <div class="detail-content-grid">
+        <div class="detail-section">
+          <h3>Team Collaboration</h3>
+          <p>Worked with a diverse 7-person team including Graphic Designer, Project Manager, Lead UI Designer, 2 UI Designers, and UI/UX Designer. Our collaboration was exceptionally effective through weekly meetings, cross-discipline knowledge sharing, and maintaining a positive, conflict-free working environment.</p>
+        </div>
+
+        <div class="detail-two-col">
+          <div class="detail-section">
+            <h3>Prototyping Leadership</h3>
+            <p>Ensured all animations and transitions were polished and user-friendly, created comprehensive prototypes for all screens and user flows, developed work from low-fidelity through to interactive prototypes, leveraged advanced Figma interactions.</p>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Design Contributions</h3>
+            <p>Led UI design specifically for settings and home pages, contributed to UX decisions across the entire app, created wireframes and detailed user flows, conducted user research to inform design decisions.</p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Design Process</h3>
+          <p>We followed a comprehensive 8-phase approach: Research Phase (understanding user needs), Individual Ideation (diverse design exploration), Wireframes & User Flows (establishing architecture), Mid-Fidelity Design (refined layouts), User Research & Testing (validation), Iterative Revisions (feedback integration), High-Fidelity Design (polished visuals), and Final Interactive Prototype (seamless experience).</p>
+        </div>
+
+        <div class="detail-two-col">
+          <div class="detail-section">
+            <h3>Key Focus Areas</h3>
+            <p><strong>Home Page:</strong> Created an intuitive control center making temperature adjustment immediately accessible with clear climate status feedback.</p>
+            <p><strong>Settings Page:</strong> Organized numerous configuration options with clear hierarchy and logical grouping, using progressive disclosure to maintain clarity.</p>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Deliverables</h3>
+            <p>Fully functional app prototype with realistic interactions, complete redesign of home and settings pages, smooth animations across all flows, validated solutions from user testing, and comprehensive documentation for development handoff.</p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Personal Growth</h3>
+          <p><strong>Discovered Strengths:</strong> Prototyping excellence in creating smooth animations, strong user flow design capabilities, solid understanding of design-to-development translation.</p>
+          <p><strong>Identified Growth Areas:</strong> UI design skills and design polish needed strengthening. Since completion, I've actively worked to improve these capabilities through practice and continued learning.</p>
+          <p>This project reinforced my passion for seamless user experiences while highlighting the importance of continuous skill development. Self-awareness and commitment to growth have made me a more well-rounded designer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2024 Designer Portfolio. All rights reserved.</p>
+    <p>
+      <a href="mailto:contact@example.com">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Dribbble</a>
+      <a href="#">GitHub</a>
+    </p>
+  </footer>
+
+  <script>
+    // Create stars with varying sizes
+    function createStars(){
+      const starsContainer=document.getElementById('stars');
+      const n=150;
+      for(let i=0;i<n;i++){
+        const d=document.createElement('div');
+        d.className='star';
+        // Random size classes
+        const size = Math.random();
+        if(size < 0.5) d.classList.add('small');
+        else if(size < 0.85) d.classList.add('medium');
+        else d.classList.add('large');
+        
+        d.style.left=Math.random()*100+'%';
+        d.style.top=Math.random()*100+'%';
+        d.style.animationDelay=Math.random()*3+'s';
+        d.style.animationDuration=(Math.random()*2+2)+'s';
+        starsContainer.appendChild(d);
+      }
+    }
+    createStars();
+
+    function scrollToSection(id){
+      const el=document.getElementById(id);
+      if(el){
+        const offset=80;
+        const y=el.getBoundingClientRect().top+window.pageYOffset-offset;
+        window.scrollTo({top:y,behavior:'smooth'});
+        updateActiveNav(id);
+      }
+    }
+    
+    function updateActiveNav(id){
+      document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+      const active=document.querySelector(`[onclick="scrollToSection('${id}')"]`);
+      if(active){active.classList.add('active')}
+    }
+
+    function filterProjects(category){
+      document.querySelectorAll('.project-category').forEach(c=>c.classList.remove('active'));
+      const target=document.getElementById(category);
+      if(target){target.classList.add('active')}
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      if(event && event.target) event.target.classList.add('active');
+    }
+
+    function showProjectDetail(n){
+      document.querySelectorAll('.project-detail').forEach(d=>d.classList.remove('active'));
+      const detail=document.getElementById(`detail-${n}`);
+      if(detail){detail.classList.add('active')}
+    }
+
+    // Update nav on scroll
+    let scrollTimeout;
+    window.addEventListener('scroll',()=>{
+      clearTimeout(scrollTimeout);
+      scrollTimeout=setTimeout(()=>{
+        const sections=['hero','projects','experience','about'];
+        const pos=window.scrollY+150;
+        sections.forEach(id=>{
+          const el=document.getElementById(id);
+          if(el){
+            const top=el.offsetTop;
+            const bottom=top+el.offsetHeight;
+            if(pos>=top && pos<bottom){updateActiveNav(id)}
+          }
+        });
+      },100);
+    });
+
+    // Prevent default for fake links
+    document.addEventListener('click',(e)=>{
+      if(e.target.classList.contains('project-card-link')){
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
